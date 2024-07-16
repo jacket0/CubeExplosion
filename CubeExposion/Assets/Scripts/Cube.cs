@@ -1,41 +1,40 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Explosion))]
+[RequireComponent(typeof(Spawner))]
 public class Cube : MonoBehaviour
 {
 	[SerializeField] private float _explosionForce = 100f;
 	[SerializeField] private float _explosionRadius = 10f;
 	[SerializeField] private int _explodeChance = 100;
+	[SerializeField] private int _decreasingMultipier = 2;
 	[SerializeField] private Cube _cube;
 
-	private Explosion _explosion;
+	private Spawner _spawner;
 
 	private void Awake()
 	{
-		_explosion = GetComponent<Explosion>();
+		_spawner = GetComponent<Spawner>();
 		GetComponent<Renderer>().material.color = Random.ColorHSV();
 	}
 
 	private void OnMouseDown()
 	{
-		ExplodeCube();
+		if (_explodeChance >= Random.Range(0, 100))
+		{
+			_explodeChance /= _decreasingMultipier;
+			ExplodeCube();
+		}
 	}
 
 	private void ExplodeCube()
 	{
-		int newChance = Random.Range(0, 100);
+		Destroy(gameObject);
+		_spawner.CreateNewCubes();
 
-		if (_explodeChance >= newChance)
+		foreach (Rigidbody explodableObject in GetExplodableObjects())
 		{
-			_explodeChance /= 2;
-			Destroy(gameObject);
-			_explosion.Splitting();
-
-			foreach (Rigidbody explodableObject in GetExplodableObjects())
-			{
-				explodableObject.AddExplosionForce(_explosionForce, transform.position, _explosionRadius);
-			}
+			explodableObject.AddExplosionForce(_explosionForce, transform.position, _explosionRadius);
 		}
 	}
 

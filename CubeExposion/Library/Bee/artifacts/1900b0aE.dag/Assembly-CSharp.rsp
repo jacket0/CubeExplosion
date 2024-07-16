@@ -356,7 +356,7 @@
 -analyzer:"C:/UniryProjects/2022.3.12f1/Editor/Data/Tools/Unity.SourceGenerators/Unity.Properties.SourceGenerator.dll"
 -analyzer:"C:/UniryProjects/2022.3.12f1/Editor/Data/Tools/Unity.SourceGenerators/Unity.SourceGenerators.dll"
 "Assets/Scripts/Cube.cs"
-"Assets/Scripts/Explosion.cs"
+"Assets/Scripts/Spawner.cs"
 -langversion:9.0
 
 /deterministic
