@@ -1,20 +1,16 @@
-using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Spawner))]
+[RequireComponent(typeof(Exploder), typeof(Rigidbody))]
 public class Cube : MonoBehaviour
 {
-	[SerializeField] private float _explosionForce = 100f;
-	[SerializeField] private float _explosionRadius = 10f;
 	[SerializeField] private int _explodeChance = 100;
 	[SerializeField] private int _decreasingMultipier = 2;
-	[SerializeField] private Cube _cube;
 
-	private Spawner _spawner;
+	private Exploder _exploder;
 
 	private void Awake()
 	{
-		_spawner = GetComponent<Spawner>();
+		_exploder = GetComponent<Exploder>();
 		GetComponent<Renderer>().material.color = Random.ColorHSV();
 	}
 
@@ -30,26 +26,6 @@ public class Cube : MonoBehaviour
 	private void ExplodeCube()
 	{
 		Destroy(gameObject);
-		_spawner.CreateNewCubes();
-
-		foreach (Rigidbody explodableObject in GetExplodableObjects())
-		{
-			explodableObject.AddExplosionForce(_explosionForce, transform.position, _explosionRadius);
-		}
-	}
-
-	private List<Rigidbody> GetExplodableObjects()
-	{
-		Collider[] hits = Physics.OverlapSphere(transform.position, _explosionRadius);
-
-		List<Rigidbody> explosionCubes = new();
-
-		foreach (Collider hit in hits)
-		{
-			if (hit.attachedRigidbody != null)
-				explosionCubes.Add(hit.attachedRigidbody);
-		}
-
-		return explosionCubes;
+		_exploder.Explode();
 	}
 }
