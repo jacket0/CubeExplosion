@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[RequireComponent(typeof(Spawner))]
 public class Exploder : MonoBehaviour
 {
 	[field: SerializeField] public float ExplosionRadius { get; private set; } = 300f;
@@ -15,9 +16,7 @@ public class Exploder : MonoBehaviour
 
 	public void Explode()
 	{
-		Collider[] hits = Physics.OverlapSphere(transform.position, ExplosionRadius);
-
-		foreach (Rigidbody explodableObject in _spawner.GetNewCubes(hits))
+		foreach (Rigidbody explodableObject in _spawner.GetCubes())
 		{
 			explodableObject.AddExplosionForce(_explosionForce, transform.position, ExplosionRadius);
 		}

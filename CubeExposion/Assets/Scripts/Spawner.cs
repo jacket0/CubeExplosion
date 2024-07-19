@@ -10,18 +10,17 @@ public class Spawner : MonoBehaviour
 
 	private List<Cube> _cubes;
 
-	public List<Rigidbody> GetNewCubes(Collider[] hits)
+	public List<Rigidbody> GetCubes()
 	{
 		CreateNewCubes();
 
 		List<Rigidbody> explosionCubes = new();
 
-		for (int i = 0; i < hits.Length; i++)
+		for (int i = 0; i < _cubes.Count; i++)
 		{
-			if (hits[i].TryGetComponent(out Cube cube))
+			if (_cubes[i].TryGetComponent(out Rigidbody rigidbody))
 			{
-				if (hits[i].attachedRigidbody != null && _cubes.Contains(cube))
-					explosionCubes.Add(hits[i].attachedRigidbody);
+				explosionCubes.Add(rigidbody);
 			}
 		}
 
