@@ -6,6 +6,7 @@ public class Exploder : MonoBehaviour
 	[field: SerializeField] public float ExplosionRadius { get; private set; } = 300f;
 
 	[SerializeField] private float _explosionForce = 100f;
+	[SerializeField] private int _decreasingMultipier = 2;
 
 	private Spawner _spawner;
 
@@ -16,7 +17,11 @@ public class Exploder : MonoBehaviour
 
 	public void Explode()
 	{
-		foreach (Rigidbody explodableObject in _spawner.GetCubes())
+		_explosionForce *= _decreasingMultipier;
+		ExplosionRadius *= _decreasingMultipier;
+		Collider[] hits = Physics.OverlapSphere(transform.position, ExplosionRadius);
+
+		foreach (Rigidbody explodableObject in _spawner.GetCubes(hits))
 		{
 			explodableObject.AddExplosionForce(_explosionForce, transform.position, ExplosionRadius);
 		}

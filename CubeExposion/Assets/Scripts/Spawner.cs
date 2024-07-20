@@ -8,20 +8,16 @@ public class Spawner : MonoBehaviour
 	[SerializeField] private int _decreasingMultipier = 2;
 	[SerializeField] private Cube _cube;
 
-	private List<Cube> _cubes;
-
-	public List<Rigidbody> GetCubes()
+	public List<Rigidbody> GetCubes(Collider[] hits)
 	{
 		CreateNewCubes();
 
 		List<Rigidbody> explosionCubes = new();
 
-		for (int i = 0; i < _cubes.Count; i++)
+		foreach (var hit in hits)
 		{
-			if (_cubes[i].TryGetComponent(out Rigidbody rigidbody))
-			{
-				explosionCubes.Add(rigidbody);
-			}
+			if (hit.attachedRigidbody != null)
+				explosionCubes.Add(hit.attachedRigidbody);
 		}
 
 		return explosionCubes;
@@ -30,13 +26,11 @@ public class Spawner : MonoBehaviour
 	private void CreateNewCubes()
 	{
 		int creatingCount = Random.Range(_minCreatingCount, _maxCreatingCount);
-		_cubes = new List<Cube>();
 
 		for (int i = 0; i < creatingCount; i++)
 		{
 			Cube newCube = Instantiate(_cube);
 			newCube.transform.localScale /= _decreasingMultipier;
-			_cubes.Add(newCube);
 		}
 	}
 }
